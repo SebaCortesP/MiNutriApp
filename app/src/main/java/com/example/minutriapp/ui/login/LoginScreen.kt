@@ -17,7 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.minutriapp.R
 import java.util.regex.Pattern
-
+import com.example.minutriapp.ui.theme.Primario
+import com.example.minutriapp.ui.theme.Cuarto
+import com.example.minutriapp.ui.theme.TitleSize
+import com.example.minutriapp.ui.theme.BodySize
+import com.example.minutriapp.ui.theme.SubtitleSize
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -26,24 +30,9 @@ fun LoginScreen(navController: NavController) {
     var emailError by remember { mutableStateOf<String?>(null) }
     var passwordError by remember { mutableStateOf<String?>(null) }
 
-    val azulSanji = Color(0xFF243B94) // color principal
+    val azulSanji = Color(0xFF243B94)
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "El libro de Sanji",
-                        color = Color.White,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = azulSanji
-                )
-            )
-        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -55,7 +44,7 @@ fun LoginScreen(navController: NavController) {
         ) {
             // Logo
             Image(
-                painter = painterResource(id = R.drawable.logo_sanji),
+                painter = painterResource(id = R.drawable.nutri_logo),
                 contentDescription = "Logo App",
                 modifier = Modifier.size(150.dp)
             )
@@ -63,12 +52,13 @@ fun LoginScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Iniciar Sesión",
+                text = "Mi NutriApp",
                 style = MaterialTheme.typography.headlineSmall,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                fontSize = TitleSize
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // Email
             OutlinedTextField(
@@ -84,7 +74,7 @@ fun LoginScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             )
             if (emailError != null) {
-                Text(emailError!!, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                Text(emailError!!, fontSize = BodySize, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -104,7 +94,7 @@ fun LoginScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             )
             if (passwordError != null) {
-                Text(passwordError!!, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                Text(passwordError!!, fontSize = BodySize, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -113,7 +103,6 @@ fun LoginScreen(navController: NavController) {
             Button(
                 onClick = {
                     var valid = true
-
                     if (email.isBlank()) {
                         emailError = "El email es obligatorio"
                         valid = false
@@ -121,12 +110,10 @@ fun LoginScreen(navController: NavController) {
                         emailError = "Formato de email inválido"
                         valid = false
                     }
-
                     if (password.isBlank()) {
                         passwordError = "La contraseña es obligatoria"
                         valid = false
                     }
-
                     if (valid) {
                         navController.navigate("home") {
                             popUpTo("login") { inclusive = true }
@@ -135,32 +122,33 @@ fun LoginScreen(navController: NavController) {
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = azulSanji,
+                    containerColor = Cuarto,
                     contentColor = Color.White
                 )
             ) {
-                Text("Iniciar Sesión")
+                Text("Iniciar Sesión", fontSize = SubtitleSize)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botones de texto (links) con color azulSanji
+            // Botones de texto (links)
             TextButton(
                 onClick = { navController.navigate("recovery") },
                 colors = ButtonDefaults.textButtonColors(
-                    contentColor = azulSanji
+                    contentColor = Cuarto,
                 )
+
             ) {
-                Text("¿Olvidaste tu contraseña?")
+                Text("¿Olvidaste tu contraseña?", fontSize = BodySize)
             }
 
             TextButton(
                 onClick = { navController.navigate("register") },
                 colors = ButtonDefaults.textButtonColors(
-                    contentColor = azulSanji
+                    contentColor = Cuarto
                 )
             ) {
-                Text("Crear cuenta")
+                Text("Crear cuenta", fontSize = BodySize)
             }
         }
     }

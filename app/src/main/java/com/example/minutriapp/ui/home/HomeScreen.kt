@@ -42,45 +42,6 @@ fun HomeScreen(navController: NavController) {
     val azulMenu = Color(0xFF2d4396)
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("MinutriApp", color = Color.White) },
-                navigationIcon = {
-                    Box {
-                        IconButton(onClick = { menuExpanded = true }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menú", tint = Color.White)
-                        }
-                        DropdownMenu(
-                            expanded = menuExpanded,
-                            onDismissRequest = { menuExpanded = false },
-                            modifier = Modifier.background(azulMenu)
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text("Inicio", color = Color.White) },
-                                onClick = {
-                                    menuExpanded = false
-                                    navController.navigate("home") {
-                                        popUpTo("home") { inclusive = true }
-                                    }
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = { Text("Cerrar sesión", color = Color.White) },
-                                onClick = {
-                                    menuExpanded = false
-                                    navController.navigate("login") {
-                                        popUpTo("login") { inclusive = true }
-                                    }
-                                }
-                            )
-                        }
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = azulNavbar
-                )
-            )
-        }
     ) { padding ->
         Column(
             modifier = Modifier

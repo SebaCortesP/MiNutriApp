@@ -9,6 +9,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -19,11 +22,29 @@ import com.example.minutriapp.ui.recovery.RecoveryScreen
 import com.example.minutriapp.ui.home.HomeScreen
 import com.example.minutriapp.ui.theme.MiNutriAppTheme
 import com.example.minutriapp.ui.components.TopNavBar
+import com.example.minutriapp.ui.home.Recipe
+import com.example.minutriapp.ui.home.parseRecipesFromJson
+import com.example.minutriapp.ui.recipes.RecipeFormScreen
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val recipes = remember { mutableStateListOf<Recipe>() }
+
+            // cargar iniciales una sola vez
+            LaunchedEffect(Unit) {
+                if (recipes.isEmpty()) {
+                    recipes.addAll(parseRecipesFromJson("""[
+              {"name": "Ensalada César", "calories": 320, "protein": 15, "carbs": 25, "fat": 18},
+              {"name": "Pollo al horno", "calories": 450, "protein": 40, "carbs": 10, "fat": 25},
+              {"name": "Smoothie de frutas", "calories": 200, "protein": 5, "carbs": 45, "fat": 2},
+              {"name": "Pasta boloñesa", "calories": 600, "protein": 30, "carbs": 70, "fat": 20},
+              {"name": "Sopa de verduras", "calories": 150, "protein": 6, "carbs": 20, "fat": 3}
+            ]"""))
+                }
+            }
             MiNutriAppTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     val navController = rememberNavController()
@@ -65,8 +86,8 @@ class MainActivity : ComponentActivity() {
                             composable("login") { LoginScreen(navController) }
                             composable("register") { RegisterScreen(navController) }
                             composable("recovery") { RecoveryScreen(navController) }
-                            composable("home") { HomeScreen(navController) }
-                        }
+                            composable("home") { HomeScreen(navController, recipes) }
+                            composable ( "createRecipe" ) { RecipeFormScreen(navController, recipes) }                        }
                     }
                 }
             }

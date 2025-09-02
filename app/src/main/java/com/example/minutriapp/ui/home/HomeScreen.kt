@@ -1,6 +1,5 @@
 package com.example.minutriapp.ui.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -24,24 +24,18 @@ data class Recipe(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
-    val json = """
-        [
-          {"name": "Ensalada César", "calories": 320, "protein": 15, "carbs": 25, "fat": 18},
-          {"name": "Pollo al horno", "calories": 450, "protein": 40, "carbs": 10, "fat": 25},
-          {"name": "Smoothie de frutas", "calories": 200, "protein": 5, "carbs": 45, "fat": 2},
-          {"name": "Pasta boloñesa", "calories": 600, "protein": 30, "carbs": 70, "fat": 20},
-          {"name": "Sopa de verduras", "calories": 150, "protein": 6, "carbs": 20, "fat": 3}
-        ]
-    """.trimIndent()
-
-    val recipes = remember { parseRecipesFromJson(json) }
-    var menuExpanded by remember { mutableStateOf(false) }
-
-    val azulNavbar = Color(0xFF243B94)
-    val azulMenu = Color(0xFF2d4396)
-
+fun HomeScreen(navController: NavController, recipes: List<Recipe>) {
+    // Carga inicial desde JSON
     Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate("createRecipe") },
+                containerColor = Color(0xFF243B94),
+                contentColor = Color.White
+            ) {
+                Icon(Icons.Default.Menu, contentDescription = "Nueva Receta")
+            }
+        }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -74,6 +68,7 @@ fun HomeScreen(navController: NavController) {
         }
     }
 }
+
 
 fun parseRecipesFromJson(json: String): List<Recipe> {
     val jsonArray = JSONArray(json)

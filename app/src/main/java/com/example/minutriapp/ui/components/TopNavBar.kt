@@ -29,12 +29,17 @@ fun TopNavBar(
     currentRoute: String,
     title: String,
     onNavigateTo: (String) -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    userName: String? = null
 ) {
     TopAppBar(
         title = {
             Text(
-                text = title,
+                text = if (userName != null && currentRoute == "home") {
+                    "Bienvenido $userName"
+                } else {
+                    title
+                },
                 color = Color.White,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
@@ -66,8 +71,26 @@ fun TopNavBar(
                     }
                 }
                 "home" -> {
-                    IconButton(onClick = { onLogout() }) {
-                        Icon(Icons.Default.ExitToApp, contentDescription = "Cerrar sesión", tint = Color.White)
+                    var expanded by remember { mutableStateOf(false) }
+                    IconButton(onClick = { expanded = true }) {
+                        Icon(Icons.Default.Menu, contentDescription = "Menú", tint = Color.White)
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        DropdownMenuItem(text = { Text("Home") }, onClick = {
+                            expanded = false
+                            onNavigateTo("home")
+                        })
+                        DropdownMenuItem(text = { Text("Perfil") }, onClick = {
+                            expanded = false
+                            onNavigateTo("profile")
+                        })
+                        DropdownMenuItem(text = { Text("Cerrar sesión") }, onClick = {
+                            expanded = false
+                            onLogout()
+                        })
                     }
                 }
             }
@@ -75,4 +98,5 @@ fun TopNavBar(
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Primario)
     )
 }
+
 

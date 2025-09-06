@@ -10,19 +10,21 @@ import androidx.navigation.NavController
 import androidx.compose.ui.text.input.KeyboardType
 import com.example.minutriapp.ui.home.Recipe
 import android.util.Log
+import com.example.minutriapp.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeFormScreen(
     navController: NavController,
-    recipes: MutableList<Recipe> // <- recibimos la lista en memoria
+    recipes: MutableList<Recipe>,
+    currentUser: User?
 ) {
     var name by remember { mutableStateOf("") }
     var calories by remember { mutableStateOf("") }
     var protein by remember { mutableStateOf("") }
     var carbs by remember { mutableStateOf("") }
     var fat by remember { mutableStateOf("") }
-
+    var author by remember { mutableStateOf("")}
     var showSuccessDialog by remember { mutableStateOf(false) }
 
     Scaffold { padding ->
@@ -57,7 +59,8 @@ fun RecipeFormScreen(
                             calories = calories.toIntOrNull() ?: 0,
                             protein = protein.toIntOrNull() ?: 0,
                             carbs = carbs.toIntOrNull() ?: 0,
-                            fat = fat.toIntOrNull() ?: 0
+                            fat = fat.toIntOrNull() ?: 0,
+                            author = currentUser?.name ?: "Sin autor"
                         )
                     )
                     showSuccessDialog = true

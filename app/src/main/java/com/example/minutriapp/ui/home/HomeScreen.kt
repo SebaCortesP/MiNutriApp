@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.minutriapp.User
 import org.json.JSONArray
 
 data class Recipe(
@@ -19,12 +20,17 @@ data class Recipe(
     val calories: Int,
     val protein: Int,
     val carbs: Int,
-    val fat: Int
+    val fat: Int,
+    val author: String
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController, recipes: List<Recipe>) {
+fun HomeScreen(
+    navController: NavController,
+    recipes: List<Recipe>,
+    currentUser: User?
+) {
     // Carga inicial desde JSON
     Scaffold(
         floatingActionButton = {
@@ -43,7 +49,12 @@ fun HomeScreen(navController: NavController, recipes: List<Recipe>) {
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Text("Bienvenido a MinutriApp", style = MaterialTheme.typography.headlineMedium)
+            //Text("Bienvenido a MinutriApp", style = MaterialTheme.typography.headlineMedium)
+            Text(
+                text = "Bienvenido ${currentUser?.name ?: "Invitado"}",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             Spacer(modifier = Modifier.height(16.dp))
 
             LazyColumn {
@@ -61,6 +72,7 @@ fun HomeScreen(navController: NavController, recipes: List<Recipe>) {
                             Text("Proteínas: ${recipe.protein} g")
                             Text("Carbohidratos: ${recipe.carbs} g")
                             Text("Grasas: ${recipe.fat} g")
+                            Text("Autor: ${recipe.author}")
                         }
                     }
                 }
@@ -81,7 +93,8 @@ fun parseRecipesFromJson(json: String): List<Recipe> {
                 calories = obj.getInt("calories"),
                 protein = obj.getInt("protein"),
                 carbs = obj.getInt("carbs"),
-                fat = obj.getInt("fat")
+                fat = obj.getInt("fat"),
+                author = obj.getString("author"),
             )
         )
     }

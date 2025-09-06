@@ -24,7 +24,12 @@ import com.example.minutriapp.ui.theme.BodySize
 import com.example.minutriapp.ui.theme.SubtitleSize
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(
+    navController: NavController,
+    onLogin: (String) -> Unit,
+    onNavigateRegister: () -> Unit,
+    onNavigateRecovery: () -> Unit)
+{
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var emailError by remember { mutableStateOf<String?>(null) }
@@ -115,9 +120,12 @@ fun LoginScreen(navController: NavController) {
                         valid = false
                     }
                     if (valid) {
+                        onLogin(email)
+                        /*
                         navController.navigate("home") {
                             popUpTo("login") { inclusive = true }
                         }
+                        */
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -133,7 +141,7 @@ fun LoginScreen(navController: NavController) {
 
             // Botones de texto (links)
             TextButton(
-                onClick = { navController.navigate("recovery") },
+                onClick = onNavigateRecovery,
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = Cuarto,
                 )
@@ -143,7 +151,7 @@ fun LoginScreen(navController: NavController) {
             }
 
             TextButton(
-                onClick = { navController.navigate("register") },
+                onClick = onNavigateRegister,
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = Cuarto
                 )

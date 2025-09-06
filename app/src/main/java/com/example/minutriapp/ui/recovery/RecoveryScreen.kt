@@ -23,7 +23,7 @@ fun RecoveryScreen(navController: NavController) {
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
-
+    var showSuccessDialog by remember { mutableStateOf(false) }
     val azulApp = Color(0xFF243B94)
 
     Scaffold(
@@ -59,14 +59,13 @@ fun RecoveryScreen(navController: NavController) {
             // btn confirmar
             Button(
                 onClick = {
-                    if (email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
-                        errorMessage = "Todos los campos son obligatorios"
-                    } else if (password != confirmPassword) {
-                        errorMessage = "Las contraseñas no coinciden"
-                    } else {
+                    if (email.isBlank()) {
+                        errorMessage = "Es obligatorio ingresar su correo"
+                    }else {
                         errorMessage = ""
                         // volver al login
-                        navController.popBackStack()
+                        showSuccessDialog = true
+                        // navController.popBackStack()
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -82,5 +81,25 @@ fun RecoveryScreen(navController: NavController) {
                 Text("Volver", color = Cuarto, fontSize = BodySize)
             }
         }
+
+    }
+    if (showSuccessDialog) {
+        AlertDialog(
+            onDismissRequest = { showSuccessDialog = false },
+            title = { Text("Proceso de recuperación de contraseña") },
+            text = { Text("Hemos enviado a su correo un mensaje con un link para proceder con la recuperación de sus credenciales.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showSuccessDialog = false
+                        navController.navigate("login") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    }
+                ) {
+                    Text("Aceptar")
+                }
+            }
+        )
     }
 }
